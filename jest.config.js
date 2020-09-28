@@ -1,3 +1,3 @@
-module.export = {
-  preset: 'ts-jest'
+module.exports = {
+  preset: 'ts-jest',
 }
