@@ -4,14 +4,25 @@ enum NodeTypes {
   COMMENT = 'COMMENT',
 }
 
-interface VNode {
-  type: NodeTypes
-  tag?: string
-  isSelfClosing?: boolean
-  attributes?: Record<string, string | true>
-  content?: string
-  children?: VNode[]
+interface ElementNode {
+  type: NodeTypes.ELEMENT
+  tag: string
+  isSelfClosing: boolean
+  attributes: Record<string, string | true>
+  children: VNode[]
 }
+
+interface TextNode {
+  type: NodeTypes.TEXT
+  content?: string
+}
+
+interface CommentNode {
+  type: NodeTypes.COMMENT
+  content: string
+}
+
+type VNode = ElementNode | TextNode | CommentNode
 
 export const parseHTML = (html: string) => {
   const nodes: VNode[] = []
