@@ -86,13 +86,21 @@ export const parseHTML = (html: string) => {
         // (<div id)=""
         html = html.slice(name.length)
         // TODO handle duplicate attribute
-        const isNoValue = /^[^\t\r\n\f />]*/.exec(html)
+        const isNoValue = !html.startsWith('=')
         if (isNoValue) {
           attributes[name] = true
-          // (<div id )class=""
-          html = html.trimStart()
           continue
         }
+        // (<div id=)""
+        html = html.slice(1)
+        const quote = html[0]
+        const isQuoted = quote === `"` || quote === `'`
+        console.assert(isQuoted, html)
+        const endIndex = html.indexOf(quote, 1)
+        const value = html.slice(1, endIndex)
+        attributes[name] = value
+        // (<div id="")
+        html = html.slice(endIndex + 1)
       }
       const isSelfClosing = html.startsWith('/>')
       let children: VNode[] = []

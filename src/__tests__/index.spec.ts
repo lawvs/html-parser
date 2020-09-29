@@ -162,4 +162,37 @@ describe('Element', () => {
       },
     ])
   })
+
+  test('attribute with value', () => {
+    const ast = parseHTML('<div id=""></div>')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: false,
+        attributes: {
+          id: '',
+        },
+        children: [],
+      },
+    ])
+  })
+
+  test('attribute with multiple value', () => {
+    const ast = parseHTML('<div id="root" class="button disabled"></div>')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: false,
+        attributes: {
+          id: 'root',
+          class: 'button disabled',
+        },
+        children: [],
+      },
+    ])
+  })
 })
