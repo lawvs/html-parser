@@ -1,28 +1,36 @@
 import { parseHTML } from '..'
 
-describe.skip('base', () => {
+describe('base', () => {
   test('should parser works', () => {
     const nodes = parseHTML(
       '<div id="main" data-x="hello">Hello<span id="sub" /></div>'
     )
-    expect(nodes).toStrictEqual({
-      tag: 'div',
-      selfClose: false,
-      attributes: {
-        id: 'main',
-        'data-x': 'hello',
-      },
-      text: 'Hello',
-      children: [
-        {
-          tag: 'span',
-          isSelfClosing: true,
-          attributes: {
-            id: 'sub',
-          },
+    expect(nodes).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: false,
+        attributes: {
+          id: 'main',
+          'data-x': 'hello',
         },
-      ],
-    })
+        children: [
+          {
+            type: 'TEXT',
+            content: 'Hello',
+          },
+          {
+            type: 'ELEMENT',
+            tag: 'span',
+            isSelfClosing: true,
+            attributes: {
+              id: 'sub',
+            },
+            children: [],
+          },
+        ],
+      },
+    ])
   })
 })
 
