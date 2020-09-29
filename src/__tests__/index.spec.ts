@@ -26,17 +26,43 @@ describe.skip('base', () => {
   })
 })
 
+describe('Comment', () => {
+  test('simple comment', () => {
+    const ast = parseHTML('<!-- comment -->')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'COMMENT',
+        content: ' comment ',
+      },
+    ])
+  })
+})
+
 describe('Text', () => {
   test('simple text', () => {
     const ast = parseHTML('some text')
 
-    expect(ast).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "content": "some text",
-          "type": 1,
-        },
-      ]
-    `)
+    expect(ast).toStrictEqual([
+      {
+        type: 'TEXT',
+        content: 'some text',
+      },
+    ])
+  })
+
+  test('simple text with comment', () => {
+    const ast = parseHTML('some text<!-- comment -->')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'TEXT',
+        content: 'some text',
+      },
+      {
+        type: 'COMMENT',
+        content: ' comment ',
+      },
+    ])
   })
 })

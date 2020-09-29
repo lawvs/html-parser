@@ -1,7 +1,7 @@
 enum NodeTypes {
-  ELEMENT,
-  TEXT,
-  COMMENT,
+  ELEMENT = 'ELEMENT',
+  TEXT = 'TEXT',
+  COMMENT = 'COMMENT',
 }
 
 interface VNode {
@@ -24,14 +24,15 @@ export const parseHTML = (html: string) => {
           // parseComment
           const endToken = '-->'
           const endIndex = html.indexOf(endToken)
-          if (endIndex !== -1) {
-            nodes.push({
-              type: NodeTypes.COMMENT,
-              content: html.slice(4, endIndex),
-            })
-            html = html.slice(endIndex + endToken.length)
-            continue
+          if (endIndex === -1) {
+            throw new Error('missing end comment tag:\n' + html)
           }
+          nodes.push({
+            type: NodeTypes.COMMENT,
+            content: html.slice(4, endIndex),
+          })
+          html = html.slice(endIndex + endToken.length)
+          continue
         }
 
         if (html.startsWith('<!DOCTYPE')) {
