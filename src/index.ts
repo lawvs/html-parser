@@ -57,11 +57,24 @@ export const parseHTML = (html: string) => {
         continue
       }
     }
+
+    //#region Text
+    const endToken = '<'
+    const endIndex = html.indexOf(endToken)
+    if (endIndex === -1) {
+      nodes.push({
+        type: NodeTypes.TEXT,
+        content: html,
+      })
+      html = ''
+      continue
+    }
     nodes.push({
       type: NodeTypes.TEXT,
-      content: html,
+      content: html.slice(0, endIndex),
     })
-    break
+    html = html.slice(endIndex)
+    //#endregion
   }
   return nodes
 }
