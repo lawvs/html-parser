@@ -118,7 +118,7 @@ describe('Element', () => {
         type: 'ELEMENT',
         tag: 'div',
         isSelfClosing: true,
-        children: undefined,
+        children: [],
       },
       {
         type: 'TEXT',

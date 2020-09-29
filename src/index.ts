@@ -70,7 +70,7 @@ export const parseHTML = (html: string) => {
         // TODO parse attributes
       }
       const isSelfClosing = html.startsWith('/>')
-      let children: VNode[] | undefined
+      let children: VNode[] = []
       if (isSelfClosing) {
         // '/>'
         html = html.slice(2)
