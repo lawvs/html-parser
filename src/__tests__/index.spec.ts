@@ -16,7 +16,7 @@ describe.skip('base', () => {
       children: [
         {
           tag: 'span',
-          selfClose: true,
+          isSelfClosing: true,
           attributes: {
             id: 'sub',
           },
@@ -27,6 +27,17 @@ describe.skip('base', () => {
 })
 
 describe('Comment', () => {
+  test('empty comment', () => {
+    const ast = parseHTML('<!---->')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'COMMENT',
+        content: '',
+      },
+    ])
+  })
+
   test('simple comment', () => {
     const ast = parseHTML('<!-- comment -->')
 
@@ -62,6 +73,56 @@ describe('Text', () => {
       {
         type: 'COMMENT',
         content: ' comment ',
+      },
+    ])
+  })
+})
+
+describe('Element', () => {
+  test('simple div', () => {
+    const ast = parseHTML('<div>hello</div>')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: false,
+        children: [
+          {
+            type: 'TEXT',
+            content: 'hello',
+          },
+        ],
+      },
+    ])
+  })
+
+  test('empty', () => {
+    const ast = parseHTML('<div></div>')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: false,
+        children: [],
+      },
+    ])
+  })
+
+  test('self closing', () => {
+    const ast = parseHTML('<div/>after')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: true,
+        children: undefined,
+      },
+      {
+        type: 'TEXT',
+        content: 'after',
       },
     ])
   })
