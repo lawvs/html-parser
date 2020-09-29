@@ -87,6 +87,7 @@ describe('Element', () => {
         type: 'ELEMENT',
         tag: 'div',
         isSelfClosing: false,
+        attributes: {},
         children: [
           {
             type: 'TEXT',
@@ -105,6 +106,7 @@ describe('Element', () => {
         type: 'ELEMENT',
         tag: 'div',
         isSelfClosing: false,
+        attributes: {},
         children: [],
       },
     ])
@@ -118,11 +120,45 @@ describe('Element', () => {
         type: 'ELEMENT',
         tag: 'div',
         isSelfClosing: true,
+        attributes: {},
         children: [],
       },
       {
         type: 'TEXT',
         content: 'after',
+      },
+    ])
+  })
+
+  test('attribute with no value', () => {
+    const ast = parseHTML('<div id></div>')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: false,
+        attributes: {
+          id: true,
+        },
+        children: [],
+      },
+    ])
+  })
+
+  test('attribute with multiple no value', () => {
+    const ast = parseHTML('<div id class></div>')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'div',
+        isSelfClosing: false,
+        attributes: {
+          id: true,
+          class: true,
+        },
+        children: [],
       },
     ])
   })

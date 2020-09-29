@@ -28,7 +28,7 @@ export const parseHTML = (html: string) => {
           const endToken = '-->'
           const endIndex = html.indexOf(endToken)
           if (endIndex === -1) {
-            throw new Error('missing end tag:\n' + html)
+            throw new Error('Missing end tag:\n' + html)
           }
           nodes.push({
             type: NodeTypes.COMMENT,
@@ -42,9 +42,9 @@ export const parseHTML = (html: string) => {
           const endToken = '>'
           const endIndex = html.indexOf(endToken)
           if (endIndex === -1) {
-            throw new Error('missing end tag:\n' + html)
+            throw new Error('Missing end tag:\n' + html)
           }
-          // TODO
+          // TODO handle DOCTYPE
           html = html.slice(endIndex + endToken.length)
           continue
         }
@@ -53,21 +53,46 @@ export const parseHTML = (html: string) => {
           const endToken = ']]>'
           const endIndex = html.indexOf(endToken)
           if (endIndex === -1) {
-            throw new Error('missing end tag:\n' + html)
+            throw new Error('Missing end tag:\n' + html)
           }
-          // TODO
+          // TODO handle CDATA
           html = html.slice(endIndex + endToken.length)
           continue
         }
       }
 
       //#region Element
-      const tagName = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(html)![1]
+      // <div>
+      // <div />
+      // <div id="">
+      const match = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(html)
+      if (!match) {
+        throw new Error('Error on match tag name:\n' + html)
+      }
+      const tagName = match[1]
+      // (<div) id=""
       html = html.slice(tagName.length + 1)
+
+      const attributes: Record<string, string | true> = {}
       while (!html.startsWith('>') && !html.startsWith('/>')) {
         // attributes
-        html = html.slice(1, html.indexOf(' '))
-        // TODO parse attributes
+        // (<div )id=""
+        html = html.trimStart()
+        const match = /^[^\t\r\n\f />=]*/.exec(html)
+        if (!match) {
+          throw new Error('Error on match attribute name:\n' + html)
+        }
+        const name = match[0]
+        // (<div id)=""
+        html = html.slice(name.length)
+        // TODO handle duplicate attribute
+        const isNoValue = /^[^\t\r\n\f />]*/.exec(html)
+        if (isNoValue) {
+          attributes[name] = true
+          // (<div id )class=""
+          html = html.trimStart()
+          continue
+        }
       }
       const isSelfClosing = html.startsWith('/>')
       let children: VNode[] = []
@@ -79,7 +104,7 @@ export const parseHTML = (html: string) => {
         const endToken = `</${tagName}>`
         const endIndex = html.indexOf(endToken)
         if (endIndex === -1) {
-          throw new Error('missing end tag:\n' + html)
+          throw new Error('Missing end tag:\n' + html)
         }
 
         children = parseHTML(html.slice(1, endIndex))
@@ -89,7 +114,7 @@ export const parseHTML = (html: string) => {
         type: NodeTypes.ELEMENT,
         tag: tagName,
         isSelfClosing,
-        // attributes: {},
+        attributes,
         children,
       })
 
