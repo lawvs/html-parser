@@ -1,34 +1,34 @@
-import { parseHTML } from "..";
+import { parseHTML } from '..'
 
-describe.skip("base", () => {
-  test("should parser works", () => {
+describe.skip('base', () => {
+  test('should parser works', () => {
     const nodes = parseHTML(
       '<div id="main" data-x="hello">Hello<span id="sub" /></div>'
-    );
+    )
     expect(nodes).toStrictEqual({
-      tag: "div",
+      tag: 'div',
       selfClose: false,
       attributes: {
-        id: "main",
-        "data-x": "hello",
+        id: 'main',
+        'data-x': 'hello',
       },
-      text: "Hello",
+      text: 'Hello',
       children: [
         {
-          tag: "span",
+          tag: 'span',
           selfClose: true,
           attributes: {
-            id: "sub",
+            id: 'sub',
           },
         },
       ],
-    });
-  });
-});
+    })
+  })
+})
 
-describe("Text", () => {
-  test("simple text", () => {
-    const ast = parseHTML("some text");
+describe('Text', () => {
+  test('simple text', () => {
+    const ast = parseHTML('some text')
 
     expect(ast).toMatchInlineSnapshot(`
       Array [
@@ -37,6 +37,6 @@ describe("Text", () => {
           "type": 1,
         },
       ]
-    `);
-  });
-});
+    `)
+  })
+})
