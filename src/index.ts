@@ -74,10 +74,13 @@ export const parseHTML = (html: string) => {
       html = html.slice(tagName.length + 1)
 
       const attributes: Record<string, string | true> = {}
-      while (!html.startsWith('>') && !html.startsWith('/>')) {
+      while (true) {
         // attributes
         // (<div )id=""
         html = html.trimStart()
+        if (html.startsWith('>') || html.startsWith('/>')) {
+          break
+        }
         const match = /^[^\t\r\n\f />=]*/.exec(html)
         if (!match) {
           throw new Error('Error on match attribute name:\n' + html)
