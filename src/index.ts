@@ -24,6 +24,27 @@ interface CommentNode {
 
 type VNode = ElementNode | TextNode | CommentNode
 
+/**
+ * native elements that can self-close, e.g. `<img>`, `<br>`, `<hr>`
+ */
+const isVoidTag = (tag: string) =>
+  [
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'link',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr',
+  ].includes(tag)
+
 export const parseHTML = (html: string) => {
   const nodes: VNode[] = []
 
@@ -121,8 +142,10 @@ export const parseHTML = (html: string) => {
       if (isSelfClosing) {
         // '/>'
         html = html.slice(2)
-      } else {
+      } else if (isVoidTag(tagName)) {
         // '>'
+        html = html.slice(1)
+      } else {
         const endToken = `</${tagName}>`
         const endIndex = html.indexOf(endToken)
         if (endIndex === -1) {
