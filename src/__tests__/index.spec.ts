@@ -106,6 +106,10 @@ describe('Element', () => {
     ])
   })
 
+  test('simple text with invalid end tag', () => {
+    expect(() => parseHTML('some text</div>')).toThrowError()
+  })
+
   test('empty', () => {
     const ast = parseHTML('<div></div>')
 
@@ -200,6 +204,24 @@ describe('Element', () => {
           class: 'button disabled',
         },
         children: [],
+      },
+    ])
+  })
+
+  test('void element', () => {
+    const ast = parseHTML('<img>after')
+
+    expect(ast).toStrictEqual([
+      {
+        type: 'ELEMENT',
+        tag: 'img',
+        isSelfClosing: false,
+        attributes: {},
+        children: [],
+      },
+      {
+        type: 'TEXT',
+        content: 'after',
       },
     ])
   })
