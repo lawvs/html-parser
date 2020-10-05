@@ -97,7 +97,7 @@ export const parseHTML = (html: string) => {
       // <div>
       // <div />
       // <div id="">
-      const match = /^<\/?([a-z][^\t\r\n\f />]*)/i.exec(html)
+      const match = /^<([a-z][^\t\r\n\f />]*)/i.exec(html)
       if (!match) {
         throw new Error('Error on match tag name:\n' + html)
       }
