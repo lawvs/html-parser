@@ -2,11 +2,13 @@
   "name": "html-parser",
   "version": "0.0.0",
   "description": "parse html",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/lawvs/html-parser",
   "author": "lawvs",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:ci": "jest --coverage"
